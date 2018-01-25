@@ -1,0 +1,35 @@
+import json
+from urllib import urlopen
+import urllib2
+
+
+url='https://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json'
+
+source = urlopen(url).read()
+
+data = json.loads(source)
+
+#print (json.dumps(data, indent=2))
+
+#print (len(data['list']['resources']))
+
+cur_rates = dict()
+
+for item in data['list']['resources']:
+    name = item['resource']['fields']['name']
+    price = item['resource']['fields']['price']
+    cur_rates[name] = price
+    lst= [key for key,value in cur_rates.items()]
+    amount = [value for key,value in cur_rates.items()]
+
+#print (usd_rates['USD/EUR'])
+
+ind_cur = str(raw_input('Which currency to be converted in the list {} '.format(lst)))
+
+if ind_cur in lst:
+    cur_l = float(cur_rates[ind_cur])
+    print (' The currency you are seeking for {}'.format(cur_l))
+
+mney = int(raw_input('How much money you want to convert ',))
+result = mney * cur_l
+print (' After the conversion the amount of the money is {}'.format(result))
